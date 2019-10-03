@@ -4,7 +4,8 @@ import React,{Component} from 'react';
 import logo from '../../assets/img/icon-login.png';
 
 //component
-import Rodape from '../../components/Rodape/Rodape';
+import Rodape from '../../components/Rodape/Rodope';
+import Titulo from '../../components/Titulo/Titulo'
 
 class Categoria extends Component{
 
@@ -21,14 +22,18 @@ class Categoria extends Component{
     }
 
     componentDidMount(){
+       this.listaAtualizada();
+    }
+
+    listaAtualizada = () =>{
         fetch('http://192.168.7.85:5000/api/categorias')
             .then(response => response.json())
             .then(data => this.setState({ lista: data}));
     }
 
-    adicionaItem = (event) =>{
+    adicionaItem = (event) => {
         event.preventDefault();
-
+        console.log(this.state.nome);
         fetch('http://192.168.7.85:5000/api/categorias',{
             method: "POST",
             body: JSON.stringify({ nome: this.state.nome }),
@@ -36,11 +41,8 @@ class Categoria extends Component{
                 "Content-Type": "application/json"
             }
         })
-        .then(response => response.json())
-        .then(data => console.log(data))
+        .then(this.listaAtualizada())
         .catch(error => console.log(error))
-
-
         
     }
 
@@ -72,7 +74,8 @@ class Categoria extends Component{
 
                 <main className="conteudoPrincipal">
                     <section className="conteudoPrincipal-cadastro">
-                    <h1 className="conteudoPrincipal-cadastro-titulo">Categorias</h1>
+                        <Titulo titulo="Categorias" />
+                    {/* <h1 className="conteudoPrincipal-cadastro-titulo">Categorias</h1> */}
                     <div className="container" id="conteudoPrincipal-lista">
                         <table id="tabela-lista">
                         <thead>
@@ -110,8 +113,8 @@ class Categoria extends Component{
                             onInput={this.atualizarNome}
                             />
                             <button
-                            onClick={this.adicionaItem}
                             id="btn__cadastrar"
+                            onClick={this.adicionaItem}
                             className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro"
                             >
                             Cadastrar
